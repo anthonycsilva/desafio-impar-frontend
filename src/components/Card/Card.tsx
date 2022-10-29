@@ -1,3 +1,4 @@
+import { Container, Row } from "react-bootstrap";
 import Button from "react-bootstrap/Button";
 import Card from "react-bootstrap/Card";
 
@@ -15,7 +16,10 @@ function CardBs() {
           Some quick example text to build on the card title and make up the
           bulk of the card's content.
         </Card.Text>
-        <Button variant="primary">Go somewhere</Button>
+        <Row className="d-flex flex-sm-nowrap btn-group justify-content-between">
+          <Button variant="outline-primary">Go somewhere</Button>
+          <Button variant="outline-primary">Go somewhere</Button>
+        </Row>
       </Card.Body>
     </Card>
   );

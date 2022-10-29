@@ -17,7 +17,7 @@ const Header: React.FC<HeaderProps> = (props) => {
         className="imageHeader"
         src="src\assets\fundo-busca\fundo-busca.png"
       />
-      <Container>
+      <Container className="container-md py-4" style={{ width: "60%" }}>
         <Row>
           <Form className="d-flex">
             <Form.Control

@@ -1,0 +1,8 @@
+.card-img {
+  width: 50% !important;
+  height: 50% !important;
+  margin: 25%;
+  object-fit: cover;
+  background-color: #e4e4e4;
+  border-radius: 50%;
+}

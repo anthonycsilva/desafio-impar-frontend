@@ -1,6 +1,7 @@
 import { Container, Row } from "react-bootstrap";
 import Button from "react-bootstrap/Button";
 import Card from "react-bootstrap/Card";
+import "./Card.css";
 
 interface CardBsProps {
   props?: React.ReactNode;
@@ -9,7 +10,7 @@ interface CardBsProps {
 function CardBs() {
   return (
     <Card style={{ width: "18rem" }}>
-      <Card.Img variant="top" src="holder.js/100px180" />
+      <Card.Img variant="top" src="src\assets\icone.svg" className="card-img" />
       <Card.Body>
         <Card.Title>Card Title</Card.Title>
         <Card.Text>

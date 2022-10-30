@@ -1,5 +1,6 @@
 import { Col, Container, Row } from "react-bootstrap";
 import CardBs from "../Card/Card";
+import "./Cars.css";
 
 const Cars = () => {
   return (

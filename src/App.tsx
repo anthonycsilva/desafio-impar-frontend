@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import NavbarBs from "./components/Navbar/NavbarBs";
 import "bootstrap/dist/css/bootstrap.min.css";
 import Header from "./components/Header/Header";
@@ -9,10 +9,15 @@ import { QueryClient, QueryClientProvider } from "react-query";
 
 const queryClient = new QueryClient();
 function App() {
+  const [newCarOpen ,setNewCarOpen] = useState<boolean>(true);
+  const handleNewCar = () => {
+    console.log(`clicked`);
+  }
   return (
     <React.Fragment>
       <QueryClientProvider client={queryClient}>
-        <Header></Header>
+        {newCarOpen && <>Bom dia</>}
+        <Header onNewCarClick={handleNewCar}></Header>
         <Cars />
       </QueryClientProvider>
     </React.Fragment>

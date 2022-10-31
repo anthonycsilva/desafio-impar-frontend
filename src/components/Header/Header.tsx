@@ -25,7 +25,9 @@ const Header: React.FC<HeaderProps> = (props) => {
               className="me-2"
               aria-label="Search"
             />
-            <Button variant="outline-success">Search</Button>
+            <Button variant="warning" className="px-5">
+              Novo Carro
+            </Button>
           </Form>
         </Row>
       </Container>

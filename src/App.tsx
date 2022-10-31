@@ -6,17 +6,23 @@ import CardBs from "./components/Card/Card";
 import Cars from "./components/Cars/Cars";
 import "./App.css";
 import { QueryClient, QueryClientProvider } from "react-query";
+import ModalBs from "./components/Modal/Modal";
 
 const queryClient = new QueryClient();
 function App() {
-  const [newCarOpen ,setNewCarOpen] = useState<boolean>(true);
+  const [newCarOpen, setNewCarOpen] = useState<boolean>(false);
   const handleNewCar = () => {
-    console.log(`clicked`);
-  }
+    setNewCarOpen((old) => !old);
+  };
+  const handleOnCloseModal = () => {
+    setNewCarOpen((old) => !old);
+  };
   return (
     <React.Fragment>
       <QueryClientProvider client={queryClient}>
-        {newCarOpen && <>Bom dia</>}
+        {newCarOpen && (
+          <ModalBs show={newCarOpen} onCloseModal={handleOnCloseModal} />
+        )}
         <Header onNewCarClick={handleNewCar}></Header>
         <Cars />
       </QueryClientProvider>

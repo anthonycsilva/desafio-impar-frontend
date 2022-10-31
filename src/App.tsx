@@ -5,12 +5,16 @@ import Header from "./components/Header/Header";
 import CardBs from "./components/Card/Card";
 import Cars from "./components/Cars/Cars";
 import "./App.css";
+import { QueryClient, QueryClientProvider } from "react-query";
 
+const queryClient = new QueryClient();
 function App() {
   return (
     <React.Fragment>
-      <Header></Header>
-      <Cars />
+      <QueryClientProvider client={queryClient}>
+        <Header></Header>
+        <Cars />
+      </QueryClientProvider>
     </React.Fragment>
   );
 }

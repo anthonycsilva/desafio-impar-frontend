@@ -13,12 +13,16 @@ interface CarsProps {
 const Cars: React.FC<CarsProps> = (props) => {
   const [cars, setCars] = useState<ICar[]>([]);
   const { data } = useQuery("cars", getData);
-  console.log(data);
+  useEffect(() => {
+    setCars(data);
+  }, [data]);
 
   return (
     <Container className="container-md">
       <Row className="d-flex justify-content-md-around py-4 gap-4 align-itens-center">
-        <CardBs />
+        {cars?.map((car, index) => (
+          <CardBs car={car} key={index} />
+        ))}
       </Row>
     </Container>
   );

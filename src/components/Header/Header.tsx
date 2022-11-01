@@ -11,9 +11,9 @@ interface HeaderProps {
 
 const Header: React.FC<HeaderProps> = (props) => {
   const newCarHandler = () => {
-    console.log('clicked header');
     props.onNewCarClick();
-  }
+  };
+  const onChangeSearchHandler = (event: any) => {};
   return (
     <React.Fragment>
       <NavbarBs></NavbarBs>
@@ -29,6 +29,7 @@ const Header: React.FC<HeaderProps> = (props) => {
               placeholder="Pesquisa"
               className="me-2"
               aria-label="Search"
+              onChange={onChangeSearchHandler}
             />
             <Button variant="warning" className="px-5" onClick={newCarHandler}>
               Novo Carro

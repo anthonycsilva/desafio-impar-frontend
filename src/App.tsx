@@ -7,6 +7,8 @@ import Cars from "./components/Cars/Cars";
 import "./App.css";
 import { QueryClient, QueryClientProvider } from "react-query";
 import ModalBs from "./components/Modal/Modal";
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const queryClient = new QueryClient();
 function App() {
@@ -23,9 +25,9 @@ function App() {
         {newCarOpen && (
           <ModalBs show={newCarOpen} onCloseModal={handleOnCloseModal} />
         )}
-        <Header onNewCarClick={handleNewCar}></Header>
-        <Cars />
+        <Cars onNewCarClick={handleNewCar} />
       </QueryClientProvider>
+      <ToastContainer />
     </React.Fragment>
   );
 }

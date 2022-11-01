@@ -2,6 +2,7 @@ import axios from "axios";
 import { Field, Form, Formik } from "formik";
 import { useState } from "react";
 import { Button, Container, Modal, ModalFooter, Row } from "react-bootstrap";
+import { toast } from "react-toastify";
 import { ICar } from "../../interfaces/ICar";
 
 interface ModalBsProps {
@@ -34,7 +35,9 @@ const ModalBs: React.FC<ModalBsProps> = (props) => {
     axios
       .post("car/addCar", formData)
       .then((response) => console.log(response))
-      .catch((err) => console.log(err));
+      .catch((err) => toast.error("Erro ao adicionar carro!"));
+    toast.success("Carro Cadastrado");
+    props.onCloseModal();
   };
 
   return (

@@ -7,9 +7,13 @@ import "./Card.css";
 interface CardBsProps {
   props?: React.ReactNode;
   car: ICar;
+  onExcluirClick(car: ICar): any;
 }
 
 const CardBs: React.FC<CardBsProps> = (props) => {
+  const handleExcluirClick = () => {
+    props.onExcluirClick(props.car);
+  };
   return (
     <Card style={{ width: "18rem" }}>
       <Card.Img variant="top" src="src\assets\icone.svg" className="card-img" />
@@ -22,7 +26,9 @@ const CardBs: React.FC<CardBsProps> = (props) => {
         </Card.Text>
         <Row className="d-flex flex-sm-nowrap btn-group justify-content-between">
           <Button variant="outline-primary">Editar</Button>
-          <Button variant="outline-primary">Exluir</Button>
+          <Button variant="outline-primary" onClick={handleExcluirClick}>
+            Exluir
+          </Button>
         </Row>
       </Card.Body>
     </Card>

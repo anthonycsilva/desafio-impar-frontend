@@ -15,7 +15,9 @@ interface CarsProps {
 
 const Cars: React.FC<CarsProps> = (props) => {
   const [newCarOpen, setNewCarOpen] = useState<boolean>(false);
+  const [searchInput, setSearchInput] = useState<string>("");
   const [cars, setCars] = useState<ICar[]>([]);
+  const [filteredList, setFilteredList] = useState<ICar[]>([]);
 
   const handleNewCar = () => {
     setNewCarOpen((old) => !old);
@@ -24,7 +26,12 @@ const Cars: React.FC<CarsProps> = (props) => {
     setNewCarOpen((old) => !old);
   };
 
-  const onChangeSearchHandler = (event: any) => {};
+  const onChangeSearchHandler = (event: any) => {
+    setSearchInput(event.target.value);
+    if (searchInput.length > 0) {
+      setCars(cars.filter((car) => car.name.match(searchInput)));
+    }
+  };
   const { data } = useQuery("cars", getData);
   useEffect(() => {
     setCars(data);

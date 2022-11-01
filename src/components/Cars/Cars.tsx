@@ -1,7 +1,9 @@
+import axios from "axios";
 import React from "react";
 import { useEffect, useState } from "react";
 import { Button, Col, Container, Form, Row } from "react-bootstrap";
-import { useQuery } from "react-query";
+import { useMutation, useQuery, useQueryClient } from "react-query";
+import { toast } from "react-toastify";
 import getData from "../../data/DataContext";
 import { ICar } from "../../interfaces/ICar";
 import CardBs from "../Card/Card";
@@ -13,11 +15,27 @@ interface CarsProps {
   childre?: React.ReactNode;
 }
 
+const deleteCar = (carId: number) => {
+  console.log(carId);
+  return axios.delete(`car/deleteCar/${carId}`).then((response) => response);
+};
+
 const Cars: React.FC<CarsProps> = (props) => {
   const [newCarOpen, setNewCarOpen] = useState<boolean>(false);
   const [searchInput, setSearchInput] = useState<string>("");
   const [cars, setCars] = useState<ICar[]>([]);
-  const [filteredList, setFilteredList] = useState<ICar[]>([]);
+  const { data } = useQuery("cars", getData);
+  const queryClient = useQueryClient();
+
+  const { mutate } = useMutation(deleteCar, {
+    onSuccess: () => {
+      toast.success("Carro foi removido");
+      queryClient.invalidateQueries("cars");
+    },
+    onError: () => {
+      toast.error("Ocorreu um erro ao remover o carro");
+    },
+  });
 
   const handleNewCar = () => {
     setNewCarOpen((old) => !old);
@@ -26,13 +44,17 @@ const Cars: React.FC<CarsProps> = (props) => {
     setNewCarOpen((old) => !old);
   };
 
+  const handleCarDelete = (car: ICar) => {
+    mutate(car.id);
+  };
+
   const onChangeSearchHandler = (event: any) => {
     setSearchInput(event.target.value);
     if (searchInput.length > 0) {
       setCars(cars.filter((car) => car.name.match(searchInput)));
     }
   };
-  const { data } = useQuery("cars", getData);
+
   useEffect(() => {
     setCars(data);
   }, [data, newCarOpen]);
@@ -68,7 +90,7 @@ const Cars: React.FC<CarsProps> = (props) => {
       <Container className="container-md">
         <Row className="d-flex justify-content-md-around py-4 gap-4 align-itens-center">
           {cars?.map((car, index) => (
-            <CardBs car={car} key={index} />
+            <CardBs car={car} key={index} onExcluirClick={handleCarDelete} />
           ))}
         </Row>
       </Container>

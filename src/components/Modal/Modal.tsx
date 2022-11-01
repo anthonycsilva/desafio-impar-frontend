@@ -35,7 +35,7 @@ const ModalBs: React.FC<ModalBsProps> = (props) => {
   return (
     <Modal show={props.show} onHide={handleClose}>
       <Modal.Header closeButton>
-        <Modal.Title>Modal heading</Modal.Title>
+        <Modal.Title>Adicionando Carro</Modal.Title>
       </Modal.Header>
       <Modal.Body>
         <Container>

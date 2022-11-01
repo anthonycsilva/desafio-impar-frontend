@@ -1,3 +1,4 @@
+import axios from "axios";
 import { Field, Form, Formik } from "formik";
 import { useState } from "react";
 import { Button, Container, Modal, ModalFooter, Row } from "react-bootstrap";
@@ -17,19 +18,23 @@ const ModalBs: React.FC<ModalBsProps> = (props) => {
     photo: undefined,
   };
 
+  const formData = new FormData();
+
   const handleClose = () => {
     props.onCloseModal();
   };
 
   const onUploadPhoto = (photo: any) => {
-    setPhoto(photo.target.value);
+    formData.append("photo", photo.target.files[0]);
   };
 
   const handleOnSubmitForm = (values: ICar) => {
-    if (photo) {
-      values.photo = photo;
-    }
-    console.log(values);
+    formData.append("name", values.name);
+    formData.append("status", values.status);
+    axios
+      .post("car/addCar", formData)
+      .then((response) => console.log(response))
+      .catch((err) => console.log(err));
   };
 
   return (

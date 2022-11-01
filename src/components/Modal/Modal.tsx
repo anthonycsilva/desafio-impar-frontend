@@ -1,4 +1,5 @@
 import { Field, Form, Formik } from "formik";
+import { useState } from "react";
 import { Button, Container, Modal, ModalFooter, Row } from "react-bootstrap";
 import { ICar } from "../../interfaces/ICar";
 
@@ -8,16 +9,26 @@ interface ModalBsProps {
 }
 
 const ModalBs: React.FC<ModalBsProps> = (props) => {
-  const InitialValues: any = {
+  const [photo, setPhoto] = useState<any>();
+  const InitialValues: ICar = {
+    id: 0,
     name: "",
     status: "",
+    photo: undefined,
   };
 
   const handleClose = () => {
     props.onCloseModal();
   };
 
-  const handleOnSubmitForm = (values: any) => {
+  const onUploadPhoto = (photo: any) => {
+    setPhoto(photo.target.value);
+  };
+
+  const handleOnSubmitForm = (values: ICar) => {
+    if (photo) {
+      values.photo = photo;
+    }
     console.log(values);
   };
 
@@ -41,6 +52,14 @@ const ModalBs: React.FC<ModalBsProps> = (props) => {
                   <Field id="name" name="name" className="form-control" />
                   <label>Status do Carro</label>
                   <Field id="status" name="status" className="form-control" />
+                  <label>Foto do Carro</label>
+                  <Field
+                    id="photo"
+                    name="photo"
+                    className="form-control"
+                    type="file"
+                    onChange={onUploadPhoto}
+                  />
                 </div>
                 <ModalFooter>
                   <Button variant="primary" type="submit">

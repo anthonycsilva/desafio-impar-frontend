@@ -2,6 +2,7 @@ import axios from "axios";
 import { Field, Form, Formik } from "formik";
 import { useState } from "react";
 import { Button, Container, Modal, ModalFooter, Row } from "react-bootstrap";
+import { QueryCache, useMutation, useQueryClient } from "react-query";
 import { toast } from "react-toastify";
 import { ICar } from "../../interfaces/ICar";
 
@@ -10,8 +11,22 @@ interface ModalBsProps {
   onCloseModal: any;
 }
 
+const postCar = (formData: FormData) => {
+  return axios.post("car/addCar", formData).then((response) => response);
+};
+
 const ModalBs: React.FC<ModalBsProps> = (props) => {
-  const [photo, setPhoto] = useState<any>();
+  const c = useQueryClient();
+  const { mutate } = useMutation(postCar, {
+    onSuccess: () => {
+      toast.success("Novo Carro Adicionado!");
+      c.invalidateQueries("cars");
+    },
+    onError: () => {
+      toast.error("Ocorreu um erro ao adicionar um novo carro");
+    },
+  });
+
   const InitialValues: ICar = {
     id: 0,
     name: "",
@@ -32,11 +47,7 @@ const ModalBs: React.FC<ModalBsProps> = (props) => {
   const handleOnSubmitForm = (values: ICar) => {
     formData.append("name", values.name);
     formData.append("status", values.status);
-    axios
-      .post("car/addCar", formData)
-      .then((response) => console.log(response))
-      .catch((err) => toast.error("Erro ao adicionar carro!"));
-    toast.success("Carro Cadastrado");
+    mutate(formData);
     props.onCloseModal();
   };
 

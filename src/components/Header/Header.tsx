@@ -6,9 +6,14 @@ import "./Header.css";
 
 interface HeaderProps {
   props?: React.ReactNode;
+  onNewCarClick?: any;
 }
 
 const Header: React.FC<HeaderProps> = (props) => {
+  const newCarHandler = () => {
+    console.log('clicked header');
+    props.onNewCarClick();
+  }
   return (
     <React.Fragment>
       <NavbarBs></NavbarBs>
@@ -21,11 +26,11 @@ const Header: React.FC<HeaderProps> = (props) => {
           <Form className="d-flex">
             <Form.Control
               type="search"
-              placeholder="Search"
+              placeholder="Pesquisa"
               className="me-2"
               aria-label="Search"
             />
-            <Button variant="warning" className="px-5">
+            <Button variant="warning" className="px-5" onClick={newCarHandler}>
               Novo Carro
             </Button>
           </Form>

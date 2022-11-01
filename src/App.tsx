@@ -13,8 +13,8 @@ function App() {
     <React.Fragment>
       <QueryClientProvider client={queryClient}>
         <Cars />
+        <ToastContainer />
       </QueryClientProvider>
-      <ToastContainer />
     </React.Fragment>
   );
 }

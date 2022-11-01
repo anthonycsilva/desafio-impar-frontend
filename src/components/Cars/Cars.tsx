@@ -5,25 +5,30 @@ import { useQuery } from "react-query";
 import getData from "../../data/DataContext";
 import { ICar } from "../../interfaces/ICar";
 import CardBs from "../Card/Card";
+import ModalBs from "../Modal/Modal";
 import NavbarBs from "../Navbar/NavbarBs";
 import "./Cars.css";
 
 interface CarsProps {
   childre?: React.ReactNode;
-  onNewCarClick?: any;
 }
 
 const Cars: React.FC<CarsProps> = (props) => {
+  const [newCarOpen, setNewCarOpen] = useState<boolean>(false);
   const [cars, setCars] = useState<ICar[]>([]);
-  const newCarHandler = () => {
-    props.onNewCarClick();
+
+  const handleNewCar = () => {
+    setNewCarOpen((old) => !old);
+  };
+  const handleOnCloseModal = () => {
+    setNewCarOpen((old) => !old);
   };
 
   const onChangeSearchHandler = (event: any) => {};
   const { data } = useQuery("cars", getData);
   useEffect(() => {
     setCars(data);
-  }, [data]);
+  }, [data, newCarOpen]);
 
   return (
     <React.Fragment>
@@ -42,12 +47,16 @@ const Cars: React.FC<CarsProps> = (props) => {
               aria-label="Search"
               onChange={onChangeSearchHandler}
             />
-            <Button variant="warning" className="px-5" onClick={newCarHandler}>
+            <Button variant="warning" className="px-5" onClick={handleNewCar}>
               Novo Carro
             </Button>
           </Form>
         </Row>
       </Container>
+
+      {newCarOpen && (
+        <ModalBs show={newCarOpen} onCloseModal={handleOnCloseModal} />
+      )}
 
       <Container className="container-md">
         <Row className="d-flex justify-content-md-around py-4 gap-4 align-itens-center">

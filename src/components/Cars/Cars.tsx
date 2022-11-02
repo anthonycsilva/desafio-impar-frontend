@@ -1,10 +1,11 @@
 import axios from "axios";
 import React from "react";
 import { useEffect, useState } from "react";
-import { Button, Col, Container, Form, Row } from "react-bootstrap";
+import { Button, Container, Form, Row } from "react-bootstrap";
 import { useMutation, useQuery, useQueryClient } from "react-query";
 import { toast } from "react-toastify";
 import getData from "../../data/DataContext";
+import CarsContext from "../../data/CarsContext";
 import { ICar } from "../../interfaces/ICar";
 import CardBs from "../Card/Card";
 import ModalBs from "../Modal/Modal";
@@ -14,39 +15,28 @@ import "./Cars.css";
 interface CarsProps {
   childre?: React.ReactNode;
 }
-
-const deleteCar = (carId: number) => {
-  console.log(carId);
-  return axios.delete(`car/deleteCar/${carId}`).then((response) => response);
-};
-
 const Cars: React.FC<CarsProps> = (props) => {
-  const [newCarOpen, setNewCarOpen] = useState<boolean>(false);
-  const [searchInput, setSearchInput] = useState<string>("");
-  const [cars, setCars] = useState<ICar[]>([]);
-  const { data } = useQuery("cars", getData);
-  const queryClient = useQueryClient();
 
-  const { mutate } = useMutation(deleteCar, {
-    onSuccess: () => {
-      toast.success("Carro foi removido");
-      queryClient.invalidateQueries("cars");
-    },
-    onError: () => {
-      toast.error("Ocorreu um erro ao remover o carro");
-    },
-  });
+
+  const [cars, setCars] = useState<ICar[]>([]);
+  const [car, setCar] = useState<ICar>();
+  const [isCarModalOpen, setIsCarModalOpen] = useState<boolean>(false);
+  const [searchInput, setSearchInput] = useState<string>("");
+  const { data } = useQuery("cars", getData);
+
 
   const handleNewCar = () => {
-    setNewCarOpen((old) => !old);
+    setIsCarModalOpen((old) => !old);
   };
   const handleOnCloseModal = () => {
-    setNewCarOpen((old) => !old);
+    setIsCarModalOpen((old) => !old);
   };
 
-  const handleCarDelete = (car: ICar) => {
-    mutate(car.id);
-  };
+  const handleCarEdit = (carInput: ICar) => {
+    setCar(carInput);
+    setIsCarModalOpen((old) => !old);
+  }
+
 
   const onChangeSearchHandler = (event: any) => {
     setSearchInput(event.target.value);
@@ -57,7 +47,7 @@ const Cars: React.FC<CarsProps> = (props) => {
 
   useEffect(() => {
     setCars(data);
-  }, [data, newCarOpen]);
+  }, [data]);
 
   return (
     <React.Fragment>
@@ -82,15 +72,17 @@ const Cars: React.FC<CarsProps> = (props) => {
           </Form>
         </Row>
       </Container>
-
-      {newCarOpen && (
-        <ModalBs show={newCarOpen} onCloseModal={handleOnCloseModal} />
+      <CarsContext.Provider value={2}>
+      {isCarModalOpen &&  (
+        <ModalBs show={isCarModalOpen} onCloseModal={handleOnCloseModal} carUpdate={car} />
       )}
+      </CarsContext.Provider>
+
 
       <Container className="container-md">
         <Row className="d-flex justify-content-md-around py-4 gap-4 align-itens-center">
           {cars?.map((car, index) => (
-            <CardBs car={car} key={index} onExcluirClick={handleCarDelete} />
+            <CardBs car={car} key={index} onUpdateClick={handleCarEdit}/>
           ))}
         </Row>
       </Container>

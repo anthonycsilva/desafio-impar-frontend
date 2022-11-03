@@ -8,11 +8,13 @@ interface CardBsProps {
   props?: React.ReactNode;
   car: ICar;
   onUpdateClick(car: ICar): any;
+  onDeleteClick(car: ICar): any;
 
 }
 
 const CardBs: React.FC<CardBsProps> = (props) => {
   const handleExcluirClick = () => {
+    props.onDeleteClick(props.car);
   };
   const handleEditClick = () => {
     props.onUpdateClick(props.car);

@@ -1,8 +1,7 @@
 import axios from "axios";
 import { Field, Form, Formik } from "formik";
-import { useState } from "react";
 import { Button, Container, Modal, ModalFooter, Row } from "react-bootstrap";
-import { QueryCache, useMutation, useQueryClient } from "react-query";
+import { useMutation, useQueryClient } from "react-query";
 import { toast } from "react-toastify";
 import { ICar } from "../../interfaces/ICar";
 

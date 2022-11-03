@@ -1,52 +1,55 @@
 import axios from "axios";
 import React from "react";
 import { useEffect, useState } from "react";
-import { Button, Col, Container, Form, Row } from "react-bootstrap";
+import { Button, Container, Form, Row } from "react-bootstrap";
 import { useMutation, useQuery, useQueryClient } from "react-query";
 import { toast } from "react-toastify";
 import getData from "../../data/DataContext";
+import CarsContext from "../../data/CarsContext";
 import { ICar } from "../../interfaces/ICar";
 import CardBs from "../Card/Card";
-import ModalBs from "../Modal/Modal";
+import ModalBs from "../Modal/ModalPost";
 import NavbarBs from "../Navbar/NavbarBs";
 import "./Cars.css";
+import ModalDelete from "../Modal/ModalDelete";
+import ModalUpdate from "../Modal/ModalUpdate";
 
 interface CarsProps {
   childre?: React.ReactNode;
 }
-
-const deleteCar = (carId: number) => {
-  console.log(carId);
-  return axios.delete(`car/deleteCar/${carId}`).then((response) => response);
-};
-
 const Cars: React.FC<CarsProps> = (props) => {
-  const [newCarOpen, setNewCarOpen] = useState<boolean>(false);
-  const [searchInput, setSearchInput] = useState<string>("");
+
+
   const [cars, setCars] = useState<ICar[]>([]);
+  const [car, setCar] = useState<ICar>();
+  const [isCarModalOpen, setIsCarModalOpen] = useState<boolean>(false);
+  const [isCarModalDeleteOpen, setIsCarModalDeleteOpen] = useState<boolean>(false);
+  const [isCarModalUpdateOpen, setIsCarModalUpdateOpen] = useState<boolean>(false);
+  const [searchInput, setSearchInput] = useState<string>("");
   const { data } = useQuery("cars", getData);
-  const queryClient = useQueryClient();
 
-  const { mutate } = useMutation(deleteCar, {
-    onSuccess: () => {
-      toast.success("Carro foi removido");
-      queryClient.invalidateQueries("cars");
-    },
-    onError: () => {
-      toast.error("Ocorreu um erro ao remover o carro");
-    },
-  });
 
-  const handleNewCar = () => {
-    setNewCarOpen((old) => !old);
+  const handleOnClosePostModal = () => {
+    setIsCarModalOpen((old) => !old);
   };
-  const handleOnCloseModal = () => {
-    setNewCarOpen((old) => !old);
+  const handleOnCloseUpdateModal = () => {
+    setIsCarModalUpdateOpen((old) => !old);
+  };
+  
+  const handleOnCloseDeleteModal = () => {
+    setIsCarModalDeleteOpen((old) => !old);
   };
 
-  const handleCarDelete = (car: ICar) => {
-    mutate(car.id);
-  };
+  const handleCarDelete = (carInput: ICar) => {
+    setCar(carInput);
+    setIsCarModalDeleteOpen((old) => !old);
+  }
+
+  const handleCarEdit = (carInput: ICar) => {
+    setCar(carInput);
+    setIsCarModalUpdateOpen((old) => !old);
+  }
+
 
   const onChangeSearchHandler = (event: any) => {
     setSearchInput(event.target.value);
@@ -57,7 +60,7 @@ const Cars: React.FC<CarsProps> = (props) => {
 
   useEffect(() => {
     setCars(data);
-  }, [data, newCarOpen]);
+  }, [data]);
 
   return (
     <React.Fragment>
@@ -76,21 +79,29 @@ const Cars: React.FC<CarsProps> = (props) => {
               aria-label="Search"
               onChange={onChangeSearchHandler}
             />
-            <Button variant="warning" className="px-5" onClick={handleNewCar}>
-              Novo Carro
+            <Button variant="warning" className="px-5" onClick={handleOnClosePostModal}>
+              Adicionar Carro
             </Button>
           </Form>
         </Row>
       </Container>
-
-      {newCarOpen && (
-        <ModalBs show={newCarOpen} onCloseModal={handleOnCloseModal} />
+      <CarsContext.Provider value={2}>
+        {isCarModalDeleteOpen && (
+          <ModalDelete show={isCarModalDeleteOpen} car={car} onCloseModal={handleOnCloseDeleteModal}/>
+        )}
+      {isCarModalOpen &&  (
+        <ModalBs show={isCarModalOpen} onCloseModal={handleOnClosePostModal}/>
       )}
+      {isCarModalUpdateOpen && (
+        <ModalUpdate show={isCarModalUpdateOpen} carUpdate={car} onCloseModal={handleOnCloseUpdateModal}/>
+      )}
+      </CarsContext.Provider>
+
 
       <Container className="container-md">
         <Row className="d-flex justify-content-md-around py-4 gap-4 align-itens-center">
           {cars?.map((car, index) => (
-            <CardBs car={car} key={index} onExcluirClick={handleCarDelete} />
+            <CardBs car={car} key={index} onUpdateClick={handleCarEdit} onDeleteClick={handleCarDelete}/>
           ))}
         </Row>
       </Container>

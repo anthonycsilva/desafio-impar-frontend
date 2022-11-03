@@ -1,9 +1,17 @@
 import axios from "axios";
 import { Field, Form, Formik } from "formik";
-import { Button, Container, Modal, ModalFooter, Row } from "react-bootstrap";
+import {
+  Alert,
+  Button,
+  Container,
+  Modal,
+  ModalFooter,
+  Row,
+} from "react-bootstrap";
 import { useMutation, useQueryClient } from "react-query";
 import { toast } from "react-toastify";
 import { ICar } from "../../interfaces/ICar";
+import postSchema from "../../schemas";
 
 interface ModalBsProps {
   show: boolean;
@@ -60,34 +68,49 @@ const ModalBs: React.FC<ModalBsProps> = (props) => {
           <Row className="d-flex justify-content-md-around py-4 gap-4 align-itens-center">
             <Formik
               initialValues={InitialValues}
+              validationSchema={postSchema}
+              validateOnBlur={true}
               onSubmit={(values) => {
                 handleOnSubmitForm(values);
               }}
             >
-              <Form>
-                <div className="mb-3 form-group">
-                  <label>Nome do Carro</label>
-                  <Field id="name" name="name" className="form-control" />
-                  <label>Status do Carro</label>
-                  <Field id="status" name="status" className="form-control" />
-                  <label>Foto do Carro</label>
-                  <Field
-                    id="photo"
-                    name="photo"
-                    className="form-control"
-                    type="file"
-                    onChange={onUploadPhoto}
-                  />
-                </div>
-                <ModalFooter>
-                  <Button variant="primary" type="submit">
-                    Adicionar
-                  </Button>
-                  <Button variant="secondary" onClick={handleClose}>
-                    Fechar
-                  </Button>
-                </ModalFooter>
-              </Form>
+              {({ errors }) => (
+                <Form>
+                  <div className="mb-3 form-group">
+                    <label>Nome do Carro</label>
+                    <Field id="name" name="name" className="form-control" />
+                    {errors.name && (
+                      <div style={{ paddingTop: "5%" }}>
+                        <Alert variant="danger">{errors.name}</Alert>
+                      </div>
+                    )}
+                    <label>Status do Carro</label>
+                    <Field id="status" name="status" className="form-control" />
+                    {errors.status && (
+                      <div style={{ paddingTop: "5%" }}>
+                        <Alert variant="danger">{errors.status}</Alert>
+                      </div>
+                    )}
+                    <label>Foto do Carro</label>
+                    <Field
+                      id="photo"
+                      name="photo"
+                      className="form-control"
+                      type="file"
+                      onChange={onUploadPhoto}
+                      required
+                    />
+                  </div>
+                  <ModalFooter>
+                    <Button variant="primary" type="submit">
+                      Adicionar
+                    </Button>
+                    <Button variant="secondary" onClick={handleClose}>
+                      Fechar
+                    </Button>
+                  </ModalFooter>
+                </Form>
+              )}
             </Formik>
           </Row>
         </Container>

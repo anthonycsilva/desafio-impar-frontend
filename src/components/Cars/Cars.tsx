@@ -68,6 +68,7 @@ const Cars: React.FC<CarsProps> = (props) => {
       <img
         className="imageHeader"
         src="src\assets\fundo-busca\fundo-busca.png"
+        style={{width: '100%'}}
       />
       <Container className="container-md py-4" style={{ width: "60%" }}>
         <Row>
